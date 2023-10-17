@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="col-md-8 offset-md-2">
+    <h1>Charlas</h1>
+    <hr>
+    {% for talk in talks %}
+    <div class="single-schedule-area d-flex flex-wrap justify-content-between align-items-center wow fadeInUp"
+         data-wow-delay="300ms" id="schedule-ext">
+        <!-- Single Schedule Thumb and Info -->
+        <div class="single-schedule-tumb-info d-flex align-items-center">
+            <!-- Single Schedule Info -->
+            <div class="single-schedule-info">
+                <h6>{{ talk.title}}</h6>
+                <p><a data-toggle="collapse" href="#descriptionTalk-{{ talk.id }}" role="button" aria-expanded="false"
+                      aria-controls="descriptionTalk">
+                    Descripción <i class="zmdi zmdi-caret-down"></i>
+                </a></p>
+                <div class="collapse" id="descriptionTalk-{{ talk.id }}">
+                    {{ talk.description }}
+                </div>
+                {% for speaker in talk.speakers.all %}
+                <p><a data-toggle="collapse" href="#descriptionSpeaker-{{ talk.id }}" role="button"
+                      aria-expanded="false" aria-controls="descriptionSpeaker">
+                    Docente: {{ speaker.name } <i class="zmdi zmdi-caret-down"></i>
+                </a></p>
+                <div class="collapse" id="descriptionSpeaker-{{ talk.id }}">
+                    {{ speaker.description }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Single Schedule Info -->
+        <div class="schedule-time-place">
+            <p><i class="zmdi zmdi-time"></i> {{ talk.start_date_time }} a {{ talk.end_date_time}} hs.</p>
+            <p><i class="zmdi zmdi-movie-alt"></i> {{ talk.room }} </p>
+        </div>
+        <!-- Schedule Btn -->
+        {% if user.is_authenticated %}
+        {% if talk.is_active %}
+        <a href="{{ talk.link_url }}" class="btn confer-btn btn-ext">Ingresar</a>
+        {% else %}
+        <a href="" class="btn confer-btn btn-vinc">Suscribirse</a>
+        {% endif %}
+        {% else %}
+        <a href="{% url 'login' %}" class="btn confer-btn btn-vinc" data-target="#loginModal" data-toggle="modal">Ingresar</a>
+        {% endif %}
+    </div>
+
+    {% endfor %}
+</div>
+{% endblock %}

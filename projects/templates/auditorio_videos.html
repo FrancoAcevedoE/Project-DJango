@@ -1,0 +1,64 @@
+{% extends "nueva_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="contenedor">
+    <img src="{% static 'img/Base_Auditorio.webp' %}" class="image-background">
+
+    <a href="/auditorio/" class="a_return">
+        <img src="{% static 'img/Flecha_Volver_DER.webp' %}">
+    </a>
+
+    <div class="a-base"></div>
+    <div class="a_menu-content">
+        <div class="a_menu-title">ENLACES DE INGRESO</div>
+
+        <div class="a_menu-links scrollbar_enable" style="height: 20.65vw;">
+            {% if audiences|length > 0 %}
+                {% for audience in audiences %}
+                <a href="{{audience.youtube_url_embed}}" class="link">
+                    <b>{{ audience.date_time|date:'l d - H:i\h' }}</b>
+                    <br>
+                    {{ audience.title }}
+                </a>
+                {% endfor %}
+            {% else %}
+            <span class="no-link">
+                No hay enlaces disponibles
+            </span>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    $('.link').click(function (e) {
+        e.preventDefault();
+        var videoPlayer = document.getElementById("a_video");
+        var newlink = $(this).attr('href');
+
+        var links = document.getElementsByClassName("link");
+        for (var i = 0; i < links.length; i++) {
+            links[i].classList.remove("active");
+        };
+        $(this).addClass("active");
+
+        if(typeof(videoPlayer) != 'undefined' && videoPlayer != null){
+            videoPlayer.setAttribute("src", newlink);
+        } else{
+            var videoPlayerNew = document.createElement("iframe");
+            var contenedor = document.getElementsByClassName("contenedor")[0];
+            contenedor.appendChild(videoPlayerNew);
+            videoPlayerNew.setAttribute("src", newlink);
+            videoPlayerNew.setAttribute("title", "YouTube video player");
+            videoPlayerNew.setAttribute("frameborder", "0");
+            videoPlayerNew.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+            videoPlayerNew.setAttribute("allowfullscreen", "");
+            videoPlayerNew.id = "a_video";
+        }
+    });
+</script>
+
+{% endblock %}

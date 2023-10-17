@@ -1,0 +1,158 @@
+{% extends "nueva_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<head>
+    <!-- Splide -->
+    <link rel="stylesheet" href="{% static 'js/splide-2.4.21/dist/css/splide.min.css' %}">
+    <script src="{% static 'js/splide-2.4.21/dist/js/splide.min.js' %}"></script>
+    <!-- Photoviewer -->
+    <link rel="stylesheet" href="{% static 'js/photoviewer/dist/photoviewer.min.css' %}">
+    <script src="{% static 'js/photoviewer/dist/photoviewer.min.js' %}"></script>
+    <!-- YouTubePopUp -->
+    <link rel="stylesheet" type="text/css" href="{% static 'js/YouTube_PopUp-master/YouTubePopUp.css' %}">
+    <script type="text/javascript" src="{% static 'js/YouTube_PopUp-master/YouTubePopUp.jquery.js' %}"></script>
+    <script type="text/javascript">
+
+
+    </script>
+</head>
+
+<div class="contenedor black">
+    <img src="{% static 'img/Base_HallStands.webp' %}" class="image-background">
+<!--<a class="bla-1" href="https://www.youtube.com/watch?v=L5s0ERQt8ek">With Autoplay</a>-->
+<!--    <a href="https://www.youtube.com/watch?v=L5s0ERQt8ek" class="bla-1"><img src="{% static 'img/Flecha_Volver_IZQ.webp' %}"></a>-->
+    <a href="/experiencias/eje-{{theme}}/" class="carrousel_return-left">
+        <img src="{% static 'img/Flecha_Volver_IZQ.webp' %}">
+    </a>
+    {% if presentations|length > 0 %}
+    <div class="splide">
+        <div class="splide__track">
+            <ul class="splide__list">
+                {% for presentation in presentations %}
+                <li class="splide__slide">
+                    <a href="#" style="cursor: unset;">
+                        <div class="window-base"></div>
+                        <div class="window-content d-flex justify-content-center align-items-center">
+                            {% if presentation.youtube_url|length > 0 %}
+                            <div class="videoPlayer" href="{{ presentation.youtube_url_embed }}"></div>
+                            <iframe src="{{ presentation.youtube_url_embed }}?controls=0"
+                                    title="YouTube video player"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen></iframe>
+                            {% endif %}
+                            {% if presentation.image_url|length > 0 %}
+                            <div class="poster" href="{{ presentation.image_resource_url }}"
+                                 style="height: 6.95vw;width: 22.25vw;">
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="poster-base"></div>
+                        <div class="poster-content scrollbar_enable">
+                            <div style="padding-bottom: 0.3vw;">
+                                <b>{{ presentation.title|upper }}</b>
+                            </div>
+                            <div style="padding: 0.3vw 0 0.3vw 0; border-bottom: 0.1vw solid black; border-top: 0.1vw solid black;">
+                                <b>Autor/es:</b><br>
+                                {% for author in presentation.authors %}
+                                <b>» </b>{{ author.first_name }} {{ author.last_name }}<br>
+                                {% endfor %}
+                            </div>
+                            <div style="padding-top: 0.3vw;">
+                                <b>Descripción:</b>
+                                {{ presentation.abstract }}
+                            </div>
+                        </div>
+                        <img src="{% static 'img/Stand_Poster.webp' %}" style="width: 100%">
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <div class="no-results">
+        <span style="height: fit-content;">No se encontraron videos-pósters</span>
+    </div>
+    {% endif %}
+
+</div>
+
+{% if presentations|length > 0 %}
+<script>
+        document.addEventListener( 'DOMContentLoaded', function () {
+            new Splide( '.splide', {
+                perPage: 2,
+                rewind : true,
+                drag   : false,
+            } ).mount();
+        } );
+
+        var windows = document.getElementsByClassName("poster");
+        if (windows != null) {
+            for (var i = 0; i < windows.length; i++) {
+                console.log(windows.length);
+                var newLink = windows[i].getAttribute("href");
+                windows[i].removeAttribute("href");
+                windows[i].appendChild(document.createElement("a"));
+                var link = windows[i].getElementsByTagName("a");
+                for (var z = 0; z < link.length; z++) {
+                    link[z].setAttribute("data-gallery", "manual");
+                    link[z].setAttribute("style", "height: 100%;width: 100%;display: flex;justify-content: center;align-items: center");
+                    link[z].setAttribute("href", newLink);
+                    link[z].appendChild(document.createElement("img"));
+                    var imag = link[z].getElementsByTagName("img");
+                    for (var q = 0; q < imag.length; q++) {
+                        imag[q].setAttribute("style", "max-height: 100%;max-width: 100%;");
+                        imag[q].setAttribute("src", newLink);
+                    };
+                };
+            };
+        };
+
+    $('[data-gallery=manual]').click(function (e) {
+
+        e.preventDefault();
+
+        var items = [],
+        options = {
+            index: $(this).index(),
+            draggable: false,
+            resizable: false,
+            title: false,
+            initMaximized: true,
+            multiInstances: false,
+            footerToolbar: ['zoomIn','zoomOut','actualSize']
+        };
+
+        let src = $(this).attr('href');
+            items.push({
+                src: src
+            });
+
+        new PhotoViewer(items, options);
+    });
+
+    var videoPlayer = document.getElementsByClassName("videoPlayer");
+        for (var i = 0; i < videoPlayer.length; i++) {
+            var newLink = videoPlayer[i].getAttribute("href");
+            videoPlayer[i].removeAttribute("href");
+            videoPlayer[i].appendChild(document.createElement("a"));
+            var link = videoPlayer[i].getElementsByTagName("a");
+            for (var z = 0; z < link.length; z++) {
+                link[z].setAttribute("href", newLink);
+                link[z].setAttribute("class", "bla-1");
+                link[z].setAttribute("style", "display: block;z-index: 100;height: 100%;width: 100%;");
+            };
+        };
+
+    jQuery(function(){
+        jQuery("a.bla-1").YouTubePopUp();
+        jQuery("a.bla-2").YouTubePopUp( { autoplay: 0 } ); // Disable autoplay
+    });
+
+</script>
+{% endif %}
+
+{% endblock %}

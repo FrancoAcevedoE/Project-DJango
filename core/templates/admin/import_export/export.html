@@ -1,0 +1,53 @@
+{% extends "admin/import_export/base.html" %}
+{% load i18n admin_urls static admin_modify %}
+{% load import_export_tags %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}"/>
+{% endblock %}
+
+{% block breadcrumbs_last %}
+{% trans "Export" %}
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="col-sm-12 form-fields">
+            <div class="panel panel-default form-panel">
+                <div class="panel-body">
+                    <fieldset class="module aligned">
+                        {% for field in form %}
+                        <div class="form-row">
+                            {{ field.errors }}
+
+                            {{ field.label_tag }}
+
+                            {{ field }}
+
+                            {% if field.field.help_text %}
+                            <p class="help">{{ field.field.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </fieldset>
+
+                    <div class="col-sm-12 form-buttons">
+                        <div data-spy="affix" data-offset-top="125">
+                            <div class="submit-row list-group">
+                                <button type="submit" title="{% trans 'Save' %}" class="list-group-item active"
+                                        name="_save">
+                                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                                    <span class="text">{% trans 'Save' %}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "nueva_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="contenedor p_doors">
+    <img src="{% static 'img/Base_Ponencias.webp' %}" class="image-background">
+
+    <a href="eje-1/" class="door-link one"></a>
+    <a href="eje-2/" class="door-link two"></a>
+    <a href="eje-3/" class="door-link three"></a>
+    <a href="eje-4/" class="door-link four"></a>
+
+    <a href="/" class="return">
+        <img src="{% static 'img/Flecha_Home.webp' %}">
+    </a>
+</div>
+
+{% endblock %}

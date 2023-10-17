@@ -1,0 +1,97 @@
+{% extends "nueva_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'js/photoviewer/dist/photoviewer.min.css' %}">
+    <script src="{% static 'js/photoviewer/dist/photoviewer.min.js' %}"></script>
+</head>
+
+<div class="contenedor black">
+    <img src="{% static 'img/Base_HallStands_Focus.png' %}" class="image-background">
+
+    <div class="e_individual">
+        {% for presentation in presentations %}
+            {% if mesa == 0 %}
+            <a href="/experiencias/eje-{{theme}}/" class="individual_return">
+            {% else %}
+            <a href="/experiencias/eje-{{theme}}/mesa-{{mesa}}/" class="individual_return">
+            {% endif %}
+            <img src="{% static 'img/arrow.svg' %}"> VOLVER
+        </a>
+
+        <div class="window-base"></div>
+        <div class="window-content">
+            {% if presentation.youtube_url|length > 0 %}
+            <iframe src="{{ presentation.youtube_url_embed }}"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen class="video_poster"></iframe>
+            {% endif %}
+            {% if presentation.image_url|length > 0 %}
+            <a data-gallery="manual" href="{{ presentation.image_resource_url }}" class="poster d-flex justify-content-center align-items-center">
+                <img src="{{ presentation.image_url }}">
+            </a>
+            {% endif %}
+        </div>
+        <div class="poster-base"></div>
+        <div class="poster-content scrollbar_enable">
+            <div style="padding-bottom: 0.3vw;">
+                <b>{{ presentation.title }}</b>
+            </div>
+            <div style="padding: 0.3vw 0 0.3vw 0; border-bottom: 0.1vw solid black; border-top: 0.1vw solid black;">
+                <b>Autor/es:</b><br>
+                {% for author in presentation.authors %}
+                <b>» </b>{{ author.first_name }} {{ author.last_name }}<br>
+                {% endfor %}
+            </div>
+            <div style="padding-top: 0.3vw;">
+                <b>Descripción:</b>
+                {{ presentation.abstract }}
+            </div>
+        </div>
+
+        <img src="{% static 'img/Stand_Poster.png' %}" class="individual_img">
+        {% endfor %}
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+        new Splide( '.splide', {
+            perPage: 2,
+            rewind : true,
+            drag   : false,
+        } ).mount();
+    } );
+
+
+    $('[data-gallery=manual]').click(function (e) {
+
+        e.preventDefault();
+
+        var items = [],
+        options = {
+            index: $(this).index(),
+            draggable: false,
+            resizable: false,
+            title: false,
+            initMaximized: true,
+            multiInstances: false,
+            footerToolbar: ['zoomIn','zoomOut','actualSize']
+        };
+
+        $('[data-gallery=manual]').each(function () {
+            let src = $(this).attr('href');
+            items.push({
+                src: src
+            });
+        });
+
+        new PhotoViewer(items, options);
+    });
+</script>
+
+{% endblock %}

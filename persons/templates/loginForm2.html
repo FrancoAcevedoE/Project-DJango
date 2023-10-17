@@ -1,0 +1,84 @@
+<div id="loginModal" class="modal fade loginM" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <section class="contact--us-area">
+                <div class="container">
+                    <div class="row">
+                        <!-- Contact Form -->
+                        <div class="col-12">
+                            <div class="contact_from_area mb-15 clearfix">
+                                <div class="contact-heading mb-30">
+                                    <div class="contact-heading mb-30"><h4>Ingresar</h4></div>
+                                </div>
+
+                                <div class="contact_form">
+                                    <form class='login-form'>
+                                        <div class="form-group">
+                                            <label for="exampleInputUsername">Correo electrónico</label>
+                                            <input type="email" class="form-control" id="exampleInputUsername"
+                                                   aria-describedby="emailHelp" placeholder="Correo electrónico">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword">Contraseña</label>
+                                            <input type="password" name="password" class="form-control"
+                                                   id="exampleInputPassword"
+                                                   placeholder="Contraseña"/>
+                                            <div id="errorlogin" style="color:red"></div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="button" class="btn confer-btn" value="login"
+                                                    onclick="login()">Ingresar
+                                            </button>
+                                        </div>
+
+                                        {% url 'admin_password_reset' as password_reset_url %}
+                                        {% if password_reset_url %}
+                                        <br>
+                                        <div class="password-reset-link">
+                                            <a href="{{ password_reset_url }}">¿Olvidaste tu contraseña o nombre de
+                                                usuario?</a>
+                                        </div>
+                                        {% endif %}
+                                        {% csrf_token %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+{% block script %}
+<script type="text/javascript">
+    function login(){
+        email = document.getElementById("exampleInputUsername").value;
+        password = document.getElementById("exampleInputPassword").value;
+        csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        $("#errorlogin").html("");
+        $.ajax({
+            type: "POST",
+            url: '/login',
+            data: {
+                'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                'email':email,
+                'password':password},
+            success : function(data) {
+                console.log(data);
+                if(data['message'] == "Success"){
+                    location.reload();
+                } else if(data['message'] == "inactive") {
+                    $("#errorlogin").html("Verifique la dirección de correo electrónico.");
+                } else{
+                    $("#errorlogin").html("El correo electrónico y la contraseña no coinciden..");
+                }
+            }
+        });
+    }
+
+
+</script>
+{% endblock %}

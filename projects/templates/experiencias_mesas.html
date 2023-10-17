@@ -1,0 +1,38 @@
+{% extends "nueva_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="contenedor black">
+    <img src="{% static 'img/Base_HallStands.webp' %}" class="image-background">
+
+    <a href="/experiencias/" class="carrousel_return-left">
+        <img src="{% static 'img/Flecha_Volver_IZQ.webp' %}">
+    </a>
+
+    <div class="mesas_list scrollbar_enable">
+        <b>MESAS</b>
+        <div class="list_group">
+            {% if commissions|length > 0 %}
+            {% for commission in commissions %}
+            <a href="mesa-{{ commission.id }}/" class="list_item" aria-current="true">
+                {{ commission.name }}
+            </a>
+            {% endfor %}
+            {% else %}
+            <span style="padding-left: 1.25vw; font-size: 1.2vw;">
+                No hay mesas disponibles
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mesas_search">
+        <form class="d-flex" style="height: 100%" method="get" action=".">
+            <input class="search_input me-2" type="text" placeholder="Buscar experiencia..." aria-label="Search" name="q">
+            <input class="search_button me-2" type="submit" value="Buscar" alt="Submit"/>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div class="background2">
+    <div class="container">
+
+        <section class="map our-speaker-area section-padding-100">
+            <div class="container" style="margin-top: 50px;">
+                <div class="row justify-content-center">
+                    <div class="col-md-5 shadow-sm p-3 mb-5 bg-white rounded">
+                        <h2>Datos de registro</h2>
+                        <form class='login-form'>
+
+                            <div class="form-group">
+                                <div id="signup_error_name" style="color:red">
+                                </div>
+                                <label for="last_name">Apellidos</label>
+                                <input type="text" class="form-control" id="last_name"
+                                       aria-describedby="emailHelp" placeholder="Apellidos">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="first_name">Nombres</label>
+                                <input type="text" class="form-control" id="first_name"
+                                       aria-describedby="emailHelp" placeholder="Nombres">
+                            </div>
+
+                            <div class="form-group">
+                                <div id="signup_error_email" style="color:red">
+                                </div>
+                                <label for="email">Correo electrónico</label>
+                                <input type="email" class="form-control" id="email"
+                                       aria-describedby="emailHelp" placeholder="Correo electrónico">
+                            </div>
+
+                            <div class="form-group">
+                                <div id="signup_error_document_number" style="color:red">
+                                </div>
+                                <label for="document_number">DNI / Pasaporte</label>
+                                <input type="text" class="form-control" id="document_number"
+                                       aria-describedby="emailHelp" placeholder="DNI / Pasaporte">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="country">País</label>
+                                <select class="form-control" id="country">
+                                    {% for country in countries %}
+                                    {% if country.id == 32 %} <!-- Argentina -->
+                                    <option value="{{ country.id }}" selected>{{ country.name }}</option>
+                                    {% else %}
+                                    <option value="{{ country.id }}">{{ country.name }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="university">Universidad / Organización</label>
+                                <select class="form-control" id="university">
+                                    {% for university in universities %}
+                                    {% if university.id == 63 %} <!-- Argentina -->
+                                    <option value="{{ university.id }}" selected>{{ university.name }}</option>
+                                    {% else %}
+                                    <option value="{{ university.id }}">{{ university.name }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                    <option value="-1">Otra</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <div id="signup_error_another_university" style="color:red"></div>
+                                <input type="text" class="form-control mdb-autocomplete" id="anotherUniversity"
+                                       placeholder="Ingrese una nueva">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="relation">Relación</label>
+                                <select class="form-control" id="relation">
+                                    <option value="Student" selected>Estudiante</option>
+                                    <option value="Graduate">Graduada/o</option>
+                                    <option value="Teacher">Docente</option>
+                                    <option value="NonTeaching">No Docente</option>
+                                    <option value="Community">Comunidad</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <div id="signup_error_affiliation" style="color:red">
+                                </div>
+                                <label for="affiliation">Filiación</label>
+                                <input type="text" class="form-control" id="affiliation"
+                                       aria-describedby="affiliationHelp" placeholder="Filiación">
+                                <small id="affiliationHelp" class="form-text text-muted">(detalle el grupo, centro de estudios, ong, dependencia del estado, etc en la cual se desempeña)</small>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="gridRadiosAssistant">Indicar el carácter de su inscripción</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="user_type"
+                                           id="gridRadiosAssistant" value="Assistant" checked>
+                                    <label class="form-check-label" for="gridRadiosAssistant"
+                                           aria-describedby="attendeesHelpInline">
+                                        Asistente
+                                        <small id="attendeesHelpInline" class="form-text text-muted">(Quien solo asista al Congreso/Jornadas)</small>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="user_type"
+                                           id="gridRadiosSpeaker" value="Speaker">
+                                    <label class="form-check-label" for="gridRadiosSpeaker"
+                                           aria-describedby="speakersHelpInline">
+                                        Ponente
+                                        <small id="speakersHelpInline" class="form-text text-muted">(Quien presenta una ponencia escrita, un poster o un video y es aprobado. Solo se expedirán certificados a aquellos/as que participen de las mesas de debate)</small>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div id="signup_error_pass" style="color:red">
+                                </div>
+                                <label for="password1">Crear contraseña</label>
+                                <input type="password" class="form-control" id="password1"
+                                       placeholder="Contraseña"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="password2">Confirmar contraseña</label>
+                                <input type="password" class="form-control" id="password2"
+                                       placeholder="Contraseña"/>
+                            </div>
+
+                            <br/>
+
+                            <div class="col-12">
+                                <button type="button" class="btn signup confer-btn col-12 col-sm-12 col-lg-12"
+                                        onclick="signup()">
+                                    Registrate
+                                </button>
+                            </div>
+
+                            {% csrf_token %}
+                        </form>
+                        </br>
+                        <p>
+                            Por cualquier inconveniente en la inscripción comuníquese con el siguiente correo
+                            <a href="mailto:congresoextension@utn.edu.ar">congresoextension@utn.edu.ar</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% load static %}
+  <script src="{% static 'js/signup.js' %}"></script>
+
+<script>
+
+   $(function() {
+   var anotherUniversity = $("#anotherUniversity");
+   anotherUniversity.hide();
+
+   var university = $("#university");
+   university.change(function() {
+    universityValue = $(this).children("option:selected").val();
+    if (universityValue == -1) {
+        anotherUniversity.show();
+    } else {
+        anotherUniversity.hide();
+    }
+   });
+});
+
+</script>
+
+{% endblock %}

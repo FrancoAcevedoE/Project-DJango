@@ -1,0 +1,87 @@
+{% extends "nueva_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="contenedor">
+    <img src="{% static 'img/Base_Auditorio.webp' %}" class="image-background">
+
+    <a href="/" class="a_return">
+        <img src="{% static 'img/Flecha_Home.webp' %}">
+    </a>
+
+    <div class="a-base"></div>
+    <div class="a_menu-content">
+        <div class="a_menu-title">CONFERENCIAS</div>
+
+        <div class="a_menu-links scrollbar_enable">
+            {% if conferences|length > 0 or conferences_old|length > 0 %}
+                {% for conference in conferences %}
+                <a href="{{conference.youtube_url_embed}}" class="link_youtube">
+                    <b>{{ conference.date_time|date:'l d - H:i\h: ' }}</b>{{ conference.name }}
+                </a>
+                {% endfor %}
+                {% for conference in conferences_old %}
+                <a href="{{conference.youtube_url_embed}}" class="link_youtube">
+                    <b>{{ conference.date_time|date:'l d - H:i\h: ' }}</b>{{ conference.name }}
+                </a>
+                {% endfor %}
+            {% else %}
+            <span class="no-link">
+                No hay enlaces disponibles
+            </span>
+            {% endif %}
+        </div>
+
+        <div class="a_menu-title">MESAS</div>
+
+        <div class="a_menu-links scrollbar_enable">
+            {% if commissions|length > 0 or commissions_old|length > 0 %}
+                {% for commission in commissions %}
+                <a href="{{commission.youtube_url_embed}}" class="link_youtube">
+                    <b>{{ commission.date_time|date:'l d - H:i\h: ' }}</b>{{ commission.name }}
+                </a>
+                {% endfor %}
+                {% for commission in commissions_old %}
+                <a href="{{commission.youtube_url_embed}}" class="link_youtube">
+                    <b>{{ commission.date_time|date:'l d - H:i\h: ' }}</b>{{ commission.name }}
+                </a>
+                {% endfor %}
+            {% else %}
+            <span class="no-link">
+                No hay enlaces disponibles
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $('.link_youtube').click(function (e) {
+        e.preventDefault();
+        var videoPlayer = document.getElementById("a_video");
+        var newlink = $(this).attr('href');
+
+        var links = document.getElementsByClassName("link_youtube");
+        for (var i = 0; i < links.length; i++) {
+            links[i].classList.remove("active");
+        };
+        $(this).addClass("active");
+
+        if(typeof(videoPlayer) != 'undefined' && videoPlayer != null){
+            videoPlayer.setAttribute("src", newlink);
+        } else{
+            var videoPlayerNew = document.createElement("iframe");
+            var contenedor = document.getElementsByClassName("contenedor")[0];
+            contenedor.appendChild(videoPlayerNew);
+            videoPlayerNew.setAttribute("src", newlink);
+            videoPlayerNew.setAttribute("title", "YouTube video player");
+            videoPlayerNew.setAttribute("frameborder", "0");
+            videoPlayerNew.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+            videoPlayerNew.setAttribute("allowfullscreen", "");
+            videoPlayerNew.id = "a_video";
+        }
+    });
+</script>
+
+{% endblock %}

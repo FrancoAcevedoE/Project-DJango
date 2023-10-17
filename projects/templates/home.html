@@ -1,0 +1,54 @@
+{% extends "nueva_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="contenedor home">
+    <img src="{% static 'img/Base_HallEntrada.webp' %}" class="image-background">
+
+    <!-- AGENDA -->
+    <div class="schedule-content">
+        <div class="title">AGENDA DEL AUDITORIO</div>
+        <div class="events scrollbar_enable">
+            {% for conference in conferences %}
+            <div class="event">
+                <a href="{{ conference.youtube_url_embed }}" target="_blank"><b>{{ conference.date_time|date:'l d - H:i\h: ' }}</b>{{ conference.name }}</a>
+            </div>
+            {% endfor %}
+            <!--{% for audience in audiences %}
+            <div class="event">
+                <b>{{ audience.date_time|date:'l d - H:i\h: ' }}</b>
+                {{ audience.title }}
+            </div>
+            {% endfor %}-->
+            {% for commission in commissions %}
+                <div class="event">
+                    <a href="{{ commission.youtube_url_embed }}" target="_blank"><b>{{ commission.date_time|date:'l d - H:i\h: ' }}</b>{{ commission.name }}</a>
+                </div>
+            {% endfor %}
+
+            {% for conference in conferences_old %}
+            <div class="event">
+                <a href="{{ conference.youtube_url_embed }}" target="_blank"><b>{{ conference.date_time|date:'l d - H:i\h: ' }}</b>{{ conference.name }}</a>
+            </div>
+            {% endfor %}
+
+            {% for commission in commissions_old %}
+                <div class="event">
+                    <a href="{{ commission.youtube_url_embed }}" target="_blank"><b>{{ commission.date_time|date:'l d - H:i\h: ' }}</b>{{ commission.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- /AGENDA -->
+
+    <!-- PUERTAS -->
+    <a href="ponencias/" class="door-link pon"></a>
+    <a href="experiencias/" class="door-link exp"></a>
+    <a href="talleres/" class="door-link tal"></a>
+    <a href="auditorio/" class="door-link aud"></a>
+    <a href="#" class="asi-link"></a>
+    <a href="admin/" class="ur-link"></a>
+    <!-- /PUERTAS -->
+</div>
+
+{% endblock %}

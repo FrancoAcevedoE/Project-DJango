@@ -1,0 +1,55 @@
+{% extends "nueva_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="contenedor black">
+    <img src="{% static 'img/Base_HallStands_Focus.png' %}" class="image-background">
+
+    <div class="p_individual">
+        {% for presentation in presentations %}
+            {% if mesa == 0 %}
+            <a href="/ponencias/eje-{{theme}}/" class="individual_return">
+            {% else %}
+            <a href="/ponencias/eje-{{theme}}/mesa-{{mesa}}/" class="individual_return">
+            {% endif %}
+            <img src="{% static 'img/arrow.svg' %}"> VOLVER
+        </a>
+
+        <div class="title-base"></div>
+        <div class="title-content scrollbar_enable">
+            {{ presentation.title }}
+        </div>
+        <div class="description-base"></div>
+        <div class="description-content scrollbar_enable">
+            {{ presentation.abstract }}
+        </div>
+        <div class="authors-base"></div>
+        <div class="authors-content scrollbar_enable">
+            {% for author in presentation.authors %}
+            <b>» </b>{{ author.first_name }} {{ author.last_name }}<br>
+            {% endfor %}
+        </div>
+
+        <a class="document_download" href="#">
+            <span>DESCARGAR</span>
+            <img src="{% static 'img/file_word.svg' %}">
+        </a>
+
+        <img src="{% static 'img/Stand_Ponencia.png' %}" class="individual_img">
+        {% endfor %}
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener( 'DOMContentLoaded', function () {
+        new Splide( '.splide', {
+            perPage: 2,
+            rewind : true,
+            drag   : false,
+        } ).mount();
+    } );
+
+</script>
+
+{% endblock %}

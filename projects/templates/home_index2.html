@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_content %}
+<div class="background1">
+    <div class="container">
+<!-- Welcome Area Start -->
+        <section class="heading section-padding-100-0">
+            <div class="container">
+            
+                <div class="row wow fadeInUp" data-wow-delay="300ms">
+                    <div class="col-12 col-sm-12 col-lg-6">
+                        <img src="{% static 'img/principal2-web.png' %}" alt="">
+                    </div>
+                    <div class="col-12 col-sm-12 col-lg-6">
+                        <img src="{% static 'img/logo-and-fecha.png' %}" alt="">
+                        <br/><br/>
+                        <a href="/signup" class="btn confer-btn col-12 col-sm-12 col-lg-12">Inscribite</a>
+                    </div>
+                </div>
+            
+                 
+            </div>
+        </section>
+{% include "thematics.html" %}
+
+
+<!-- Our Schedule Area Start -->
+<section class="our-schedule-area section-padding-0-100" id="agenda-actividades" >
+    <div class="container">
+        <div class="row">
+            <!-- Heading -->
+            <div class="col-12">
+                <div class="section-heading-2 text-center wow fadeInUp" data-wow-delay="300ms">
+                    <h4>AGENDA DE ACTIVIDADES</h4>
+                </div>
+            </div>
+        </div>
+
+        {# include "inicioVt.html" #}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="schedule-tab">
+                    <!-- Nav Tabs -->
+                    <ul class="nav nav-tabs wow fadeInUp" data-wow-delay="300ms" id="conferScheduleTab"
+                        role="tablist">
+
+                        {% for day in days %}
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ day.active_day }}" id='{{ day.id }}-tab' data-toggle="tab" href="#step-{{ day.id }}" role="tab"
+                               aria-controls="step-one" aria-expanded="true">{{ day.name|upper }} <br>
+                                <span>{{ day.date_format|upper }} </span></a>
+                        </li>
+
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="conferScheduleTabContent">
+
+                    {% for day in days %}
+
+                    <div class="tab-pane fade show {{ day.active_day }}" id="step-{{ day.id }}" role="tabpanel" aria-labelledby="{{ day.id }}-tab">
+
+                        {% include "day_acts.html" %}
+
+                        {% include "day_talks.html" %}
+
+                        {% include "day_masterful.html" %}
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Our Schedule Area End -->
+
+<!--<section class="map">
+    <div class="container">
+        <div class="row wow fadeInUp" data-wow-delay="300ms"
+             style="visibility: visible; animation-delay: 300ms; animation-name: fadeInUp;">
+
+            <div class="col-12">
+                <div class="section-heading-2 text-center wow fadeInUp" data-wow-delay="300ms">
+                    <h4>AUSPICIAN</h4>
+                </div>
+            </div>
+
+            <div class="col-12 text-center">
+
+                <div class="row wow fadeInUp" data-wow-delay="300ms">
+
+                <div class="col-md-4 col-sm-4 col-xs-4 ">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <a href="https://www.fagdut.org.ar/" class="footer-logo">
+                                <img class="img-fluid" src="{% static 'img/logofagdut.png' %}">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-4 col-xs-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <a href="https://www.frvt.utn.edu.ar/" class="footer-logo">
+                                <img class="img-fluid" src="{% static 'img/logofacvt.png' %}">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-4 col-xs-4">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <a href="https://utn.edu.ar/es/" class="footer-logo">
+                                <img class="img-fluid" src="{% static 'img/logoutnblack.png' %}">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>-->
+    </div>
+</div>
+{% endblock %}

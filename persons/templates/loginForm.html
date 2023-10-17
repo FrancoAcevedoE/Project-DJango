@@ -1,0 +1,203 @@
+<div id="loginModal" class="modal fade loginM" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#menu_login">
+                            <div class="contact-heading mb-30">
+                                <div class="contact-heading mb-30"><h4>Ingresar</h4></div>
+                            </div>
+                        </a>
+
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#menu_register">
+                            <div class="contact-heading mb-30">
+                                <div class="contact-heading mb-30"><h4>Registrarse</h4></div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <style type="text/css">
+                  input{
+                    max-width:500px;
+                  }
+
+            </style>
+            <div class="modal-body">
+                <div class="tab-content">
+                    <div id="menu_login" class="container tab-pane active">
+                        <form class='login-form'>
+                            <div class="form-group">
+                                <label for="exampleInputUsername">Correo electrónico</label>
+                                <input type="email" class="form-control" id="exampleInputUsername"
+                                       aria-describedby="emailHelp" placeholder="Correo electrónico">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputPassword">Contraseña</label>
+                                <input type="password" name="password" class="form-control" id="exampleInputPassword"
+                                       placeholder="Contraseña"/>
+                                <div id="errorlogin" style="color:red"></div>
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="btn confer-btn" value="login" onclick="login()">Ingresar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="menu_register" class="container tab-pane">
+                        <div class="container tab-pane">
+                            <form class='login-form'>
+
+                                <div class="form-group">
+                                    <div id="errorname" style="color:red">
+                                    </div>
+                                    <label for="exampleInputFname">Nombres</label>
+                                    <input type="text" class="form-control" id="exampleInputFname"
+                                           aria-describedby="emailHelp" placeholder="Nombres">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputLname">Apellidos</label>
+                                    <input type="text" class="form-control" id="exampleInputLname"
+                                           aria-describedby="emailHelp" placeholder="Apellidos">
+                                </div>
+
+                                <div class="form-group">
+                                    <div id="erroremail" style="color:red">
+                                    </div>
+                                    <label for="exampleInputEmail">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail"
+                                           aria-describedby="emailHelp" placeholder="Correo electrónico">
+                                </div>
+
+                                <div class="form-group">
+                                    <div id="errorDocumentNumber" style="color:red">
+                                    </div>
+                                    <label for="exampleInputDocumentNumber">DNI</label>
+                                    <input type="email" class="form-control" id="exampleInputDocumentNumber"
+                                           aria-describedby="emailHelp" placeholder="DNI">
+                                </div>
+
+                                <div class="form-group">
+                                    <div id="errorUniversity" style="color:red">
+                                    </div>
+                                    <label for="inputUniversity">Universidad a la que perteneces</label>
+                                    <input type="email" class="basicAutoComplete form-control mdb-autocomplete" id="inputUniversity"
+                                           aria-describedby="emailHelp" placeholder="Universidad a la que perteneces">
+                                </div>
+
+                                <div class="form-group">
+                                    <div id="errorpass" style="color:red">
+                                    </div>
+                                    <label for="exampleInputPassword1">Crear contraseña</label>
+                                    <input type="password" class="form-control" id="exampleInputPassword1"
+                                           placeholder="Contraseña"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword2">Confirmar contraseña</label>
+                                    <input type="password" class="form-control" id="exampleInputPassword2"
+                                           placeholder="Contraseña"/>
+                                </div>
+                                <div class="col-12">
+                                    <button type="button" class="btn confer-btn" value="login" onclick="signup()">
+                                        Registrarse
+                                    </button>
+                                </div>
+
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@master/dist/latest/bootstrap-autocomplete.min.js"></script>
+<script type="text/javascript">
+    function login(){
+        email = document.getElementById("exampleInputUsername").value;
+        password = document.getElementById("exampleInputPassword").value;
+        csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        $("#errorlogin").html("");
+        $.ajax({
+            type: "POST",
+            url: '/login',
+            data: {
+                'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                'email':email,
+                'password':password},
+            success : function(data) {
+                console.log(data);
+                if(data['message'] == "Success"){
+                    location.reload();
+                } else if(data['message'] == "inactive") {
+                    $("#errorlogin").html("Verifique la dirección de correo electrónico.");
+                } else{
+                    $("#errorlogin").html("El correo electrónico y la contraseña no coinciden..");
+                }
+            }
+        });
+    }
+
+    function signup() {
+        email = document.getElementById("exampleInputEmail").value;
+        fname = document.getElementById("exampleInputFname").value;
+        lname = document.getElementById("exampleInputLname").value;
+        university = document.getElementById("inputUniversity").value;
+        documentNumber = document.getElementById("exampleInputDocumentNumber").value;
+        password1 = document.getElementById("exampleInputPassword1").value;
+        password2 = document.getElementById("exampleInputPassword2").value;
+        csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+
+        $("#erroremail").html("");
+        $("#errorpass").html("");
+        if(fname == "" || lname == "") {
+            $("#errorname").html("Nombre y apellido son obligatorios");
+
+        } else {
+            $.ajax({
+            type:"POST",
+            url:'/signup',
+            data:{
+                'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                'first_name':fname,
+                'last_name':lname,
+                'email':email,
+                'document_number':documentNumber,
+                'university':university,
+                'password1':password1,
+                'password2':password2 },
+            success : function(data){
+                console.log(data['message']);
+                if(data['message'] == "Success"){
+                    window.location = "/"
+                }
+                else{
+                    if("email" in data['message'])
+                        $("#erroremail").html(data['message']['email'][0]);
+                    if("password2" in data['message'])
+                        $("#errorpass").html(data['message']['password2'][0]);
+                }
+            }
+        })
+        }
+    }
+
+    $('.basicAutoComplete').autoComplete({minLength: 1});
+    $('.dropdown-menu').css({'top': 'auto', 'left': 'auto'})
+
+</script>
+{% endblock %}
